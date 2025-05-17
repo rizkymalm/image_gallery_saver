@@ -27,13 +27,13 @@ import android.webkit.MimeTypeMap
 import java.io.OutputStream
 
 class ImageGallerySaverPlugin : FlutterPlugin, MethodCallHandler {
-    private lateinit var methodChannel: MethodChannel
-    private var applicationContext: Context? = null
+    private lateinit var channel: MethodChannel
+    private lateinit var context: Context
 
-    override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-        this.applicationContext = binding.applicationContext
-        methodChannel = MethodChannel(binding.binaryMessenger, "image_gallery_saver")
-        methodChannel.setMethodCallHandler(this)
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        context = flutterPluginBinding.applicationContext
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "image_gallery_saver")
+        channel.setMethodCallHandler(this)
     }
 
     override fun onMethodCall(@NonNull call: MethodCall,@NonNull result: Result): Unit {
@@ -64,9 +64,8 @@ class ImageGallerySaverPlugin : FlutterPlugin, MethodCallHandler {
         }
     }
 
-    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-        applicationContext = null
-        methodChannel.setMethodCallHandler(null);
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        channel.setMethodCallHandler(null)
     }
 
     private fun generateUri(extension: String = "", name: String? = null): Uri? {
